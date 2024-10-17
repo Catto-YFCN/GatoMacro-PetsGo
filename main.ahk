@@ -43,10 +43,9 @@ if (CompareVersions(localVersion, currentVersion) < 0)
 
         MsgBox, 4, Update Detected!, %output%
 
-        ; Handle the user's response
-        ifMsgBox Yes
+                ifMsgBox Yes
         {
-            Run % "https://github.com/Catto-YFCN/GatoMacroData/releases/tag/Release"
+            Run % "https://github.com/Catto-YFCN/GatoMacro-PetsGo/releases/tag/Release"
         }
     }
 }
@@ -76,13 +75,11 @@ CompareVersions(v1, v2)
     return 0
 }
 
-; Pre-loading boo
 IniRead, firstTime, %IniFile%, Stats, firstTime, 1
 if(firstTime=1){
     MsgBox, 64, Welcome!, Seems like it's your first time here. Remember that when starting, you need to make sure you haven't done anything, as in rejoin the server, and don't touch anything, and start the macro.
     IniWrite, 0, %IniFile%, Stats, firstTime
 }
-; Pre-loading these 4 because of the webhook function boohoo
 IniRead, webhookLink, %IniFile%, Settings, webhookLink, DefaultLink
 IniRead, webhookToggle, %IniFile%, Settings, webhookToggle, 0
 IniRead, pingToggle, %IniFile%, Settings, pingToggle, 0
@@ -101,8 +98,6 @@ zoomOutTiny(){
     Sleep, 400
     Send, {O up}
 }
-; Sleep, 2000
-; zoomOutTiny()
 zoomIn(){
     Send, {I down}
     Sleep, 2000
@@ -111,18 +106,16 @@ zoomIn(){
 
 
 redpixel(x, y) {
-    Gui, PixelGUI:New, -Caption +ToolWindow +AlwaysOnTop +E0x20 ; Transparent GUI with no window title
-    Gui, Color, Red  ; Set the GUI's background color to red (the "pixel")
+    Gui, PixelGUI:New, -Caption +ToolWindow +AlwaysOnTop +E0x20
+    Gui, Color, Red
     
-    ; Create a 1x1 pixel window at the specified coordinates
     Gui, Show, x%x% y%y% w100 h100, RedPixel
     
-    ; Set a timer to hide the pixel after 5 seconds
     SetTimer, HidePixel, -5000
     return
 
     HidePixel:
-        Gui, PixelGUI:Destroy  ; Remove the GUI after 5 seconds
+        Gui, PixelGUI:Destroy
     return
 }
 
@@ -203,24 +196,24 @@ CheckBottomCenter(filePath) {
 
 screenshot(filePath)
 {
-    ; Initialize GDI+ and create a graphics object
+    
     pToken := Gdip_Startup()
     
-    ; Capture the entire screen
+    
     pBitmap := Gdip_BitmapFromScreen()
     
-    ; Save the bitmap to the specified file path (supports png, jpg, bmp, etc.)
+    
     Gdip_SaveBitmapToFile(pBitmap, filePath)
     
-    ; Clean up resources
+    
     Gdip_DisposeImage(pBitmap)
     Gdip_Shutdown(pToken)
     
-    ; Return the path for confirmation (optional)
+    
     return filePath
 }
 
-; Variable to track macro state
+
 MacroRunning := False
 
 ; Register global hotkeys
@@ -251,89 +244,6 @@ Gui, Add, GroupBox, x145 y35 w125 h90, Vending
 Gui, Add, Checkbox, x150 y55 vEnableVending gSaveSettings, Enable Vending
 Gui, Add, GroupBox, x150 y70 w115 h50
 Gui, Add, Checkbox, x155 y80 vEnableVendingPotion gSaveSettings, Potions
-; Gui, Add, Checkbox, x155 y100 vEnableVendingHolder gSaveSettings, Placeholder
-
-; Gui, Add, Text, x20 y65, Select Map:
-; Gui, Add, DropDownList, x20 y80 w100 vSelectMap gSaveSettings, 1 - Planet Namak|2 - Sand Village|3 - Double Dungeon
-; Gui, Add, Text, x20 y105, Select Level:
-; Gui, Add, DropDownList, x20 y120 w100 vSelectLevel gSaveSettings, Act 1|Act 2|Act 3|Act 4|Act 5|Act 6|Infinite|Paragon
-; Gui, Add, Text, x20 y145, Select Type:
-; Gui, Add, DropDownList, x20 y160 w100 vSelectType gSaveSettings, Normal|Nightmare
-
-
-; ; Farming+ GroupBox
-; Gui, Add, GroupBox, x140 y35 w135 h110, Farming+ ( Legend )
-; ; Info button
-; Gui, Add, Button, x255 y40 w20 h20 gFarmingPlusInfoBox, ?
-; Gui, Add, Checkbox, x145 y50 vEnableFarmingPlus gSaveSettings, Enable Farming+
-; Gui, Add, Text, x145 y65, Select Map:
-; Gui, Add, DropDownList, x145 y80 w100 vSelectMapPlus gSaveSettings, 1 - Sand Village|2 - Double Dungeon
-; Gui, Add, Text, x145 y105, Select Level:
-; Gui, Add, DropDownList, x145 y120 w100 vSelectLevelPlus gSaveSettings, Act 1|Act 2|Act 3
-
-; ; Time Chamber GroupBox
-; Gui, Add, GroupBox, x140 y145 w135 h40, Time Chamber
-; Gui, Add, Checkbox, x145 y160 vEnableTimeChamber gSaveSettings, Enable Time Chamber
-
-; ; Macro GroupBox
-; Gui, Add, GroupBox, x280 y35 w205 h175, Macro
-; ; Info Button
-; Gui, Add, Button, x465 y40 w20 h20 gMacroInfoBox, ?
-; Gui, Add, Text, x285 y50, Starting Macro
-; Gui, Add, DropDownList, x285 y65 w90 vSelectStartMacro gSaveSettings, 
-; Gui, Add, Text, x385 y50, Repeating Macro
-; Gui, Add, DropDownList, x385 y65 w90 vSelectRepeatMacro gSaveSettings, 
-; PopulateDropdowns()
-; ; Set font size smaller before adding the text
-; Gui, Font, s7 ; Set font size to 8 (you can adjust this value to make it smaller or larger)
-
-; ; Macro Creator GroupBox
-; Gui, Add, GroupBox, x285 y90 w190 h115, Macro Creator
-; Gui, Add, Text, x290 y105 c008000, You should join the discord to better`nunderstand this feature.
-; Gui, Add, Button, x290 y135 w150 gMacroCreatorOpen, Open Macro Creator  ; Set width to 150
-; Gui, Add, Button, x290 y165 w150 gMacroCreatorEdit, Edit Existing Macro  ; Set the same width
-
-
-; ; Below Farming, Farming+/Time Chamber too empty so this line is to just filler
-; Gui, Add, Text, x15 y200 w262 h1 0x10,  ; A thin horizontal line
-; Gui, Add, Text, x15 y201 w262 h1 0x10,  ; A thin horizontal line
-; Gui, Add, Text, x15 y202 w262 h1 0x10,  ; A thin horizontal line
-
-; EXTRAS Tab
-
-
-; Gui, Tab, Extras
-; Gui, Add, Text, x15 y40 cRed, Notice: 
-; Gui, Add, Text, x+0 y40, All options in this tab still use macros from the main tab.
-; ; Raids GroupBox
-; Gui, Add, GroupBox, x15 y55 w135 h110, Raids
-; Gui, Add, Checkbox, x20 y70 vEnableRaid gSaveSettings, Enable Raid
-; Gui, Add, Text, x20 y85, Select Map:
-; Gui, Add, DropDownList, x20 y100 w100 vSelectMapRaid gSaveSettings, 1 - Spider Forest
-; Gui, Add, Text, x20 y125, Select Level:
-; Gui, Add, DropDownList, x20 y140 w100 vSelectLevelRaid gSaveSettings, Act 1|Act 2|Act 3|Act 4
-
-; ; Boss Raid GroupBox
-; Gui, Add, GroupBox, x15 y165 w135 h40, Boss Raids
-; Gui, Add, Checkbox, x20 y180 vEnableBossRaid gSaveSettings, Enable Boss Raids
-
-; Gui, Add, GroupBox, x15 y95 w120 h60, Challenges ( Soon )
-
-
-; ; Farming+ GroupBox
-; Gui, Add, GroupBox, x140 y35 w135 h110, Farming+
-; ; Info button
-; Gui, Add, Button, x255 y40 w20 h20 gFarmingPlusInfoBox, ?
-; Gui, Add, Checkbox, x145 y50 vEnableFarmingPlus gSaveSettings, Enable Farming+
-; Gui, Add, Text, x145 y65, Select Map:
-; Gui, Add, DropDownList, x145 y80 w100 vSelectMapPlus gSaveSettings, 1 - Sand Village|2 - Double Dungeon
-; Gui, Add, Text, x145 y105, Select Level:
-; Gui, Add, DropDownList, x145 y120 w100 vSelectLevelPlus gSaveSettings, Act 1|Act 2|Act 3
-
-; ; Time Chamber GroupBox
-; Gui, Add, GroupBox, x140 y145 w135 h40, Time Chamber
-; Gui, Add, Checkbox, x145 y160 vEnableTimeChamber gSaveSettings, Enable Time Chamber
-
 
 ; SETTINGS TAB
 Gui, Tab, Settings
@@ -355,14 +265,6 @@ Gui, Add, Checkbox, x250 y50 vEnableReconnect gSaveSettings, Enable Reconnect
 Gui, Add, Text, x250 y65, Private Server Link:
 Gui, Add, Edit, x250 y80 w200 vReconnectTime gSaveSettings, Server Link
 
-; User Info
-; Info Box
-; Gui, Add, Button, x445 y110 w20 h20 gUserInfoInfoBox, ?
-; Gui, Add, GroupBox, x245 y105 w220 h40, Info
-; Gui, Add, Text, x250 y125, Level:
-; ; Gui, Add, Edit, x290 y120 w30 h15 vUserLevel gSaveSettings, 0
-; Gui, Add, DropDownList, x290 y120 w100 vUserLevel gSaveSettings, Level 21 and below|Level 22 and above
-
 Gui, Add, Button, x445 y120 w20 h20 gSettingsInfoBox, ?
 Gui, Add, GroupBox, x245 y115 w220 h45, Settings
 Gui, Add, Button, x250 y130 w90 gExportSettings, Export Settings  ; Set the same width
@@ -376,24 +278,13 @@ Gui, Add, GroupBox, x20 y40 w250 h80, Creators
 Gui, Add, Picture, x25 y55 w60 h60, %A_ScriptDir%\images\Gato.png
 Gui, Add, Text, x90 y55, Gato -  Lead developer, I made this`nmacro because I've seen macro's`nfor numerous games and wanted`nto give it a shot lol. ; Placeholder text for Gato image
 
-; Add a line (separator) between the two images
-; Gui, Add, Text, x20 y125 w253 h1 0x10,  ; A thin horizontal line
-
-; Gui, Add, Picture, x25 y140 w60 h60, %A_ScriptDir%\images\Kanekovisk.png
-; Gui, Add, Text, x90 y140, Kanekovisk -  Ex-developer, helped`nin the early development of Gato`nMacro but has since stopped working`non it, this wouldn't have been possible`nwithout him. ; Placeholder text for Kanekovisk image
-
 ; DolphSol & Natro GroupBox
 Gui, Add, GroupBox, x280 y40 w200 h80, DolphSol n Natro
 Gui, Add, Picture, x285 y55 w60 h60, %A_ScriptDir%\images\Dolph.png
 Gui, Add, Picture, x355 y55 w60 h60, %A_ScriptDir%\images\Natro.ico
-Gui, Add, Text, x420 y50, Helped me`nunderstand`nAHK and`nhad some`nrecourses. ; Placeholder text for DolphSol image
+Gui, Add, Text, x420 y50, Helped me`nunderstand`nAHK and`nhad some`nrecourses.
 
-; Natro GroupBox
-; Gui, Add, GroupBox, x280 y125 w200 h85, Natro
-; Gui, Add, Picture, x285 y55 w60 h60, %A_ScriptDir%\images\Natro.ico
-; Gui, Add, Text, x350 y160, Placeholder  ; Placeholder text for Natro image
-
-Gui, Tab  ; Reset to default tab
+Gui, Tab
 
 ; Add the Discord join button
 Gui, Add, Picture, x455 y220 w30 h25 gJoinDiscord, %A_ScriptDir%/images/discordIcon.png
@@ -488,18 +379,6 @@ SaveSettings:
     IniWrite, %hideRollToggle%, %IniFile%, Settings, hideRollToggle
     IniWrite, %vendingToggle%, %IniFile%, Settings, vendingToggle
     IniWrite, %vendingPotionToggle%, %IniFile%, Settings, vendingPotionToggle
-
-    ; Old version
-    ; if (rollToggle = 1) {
-    ;     GuiControl, Enable, EnableAutoRoll
-    ;     GuiControl, Enable, EnableHideRoll
-    ; } else if (vendingToggle = 1) {
-    ;     GuiControl, Enable, EnableVendingPotion
-    ; } else {
-    ;     GuiControl, Disable, EnableAutoRoll
-    ;     GuiControl, Disable, EnableHideRoll
-    ;     GuiControl, Disable, EnableVendingPotion
-    ; }
 
     if (rollToggle = 1) {
         GuiControl, Enable, EnableAutoRoll
@@ -772,7 +651,7 @@ CheckRoblox:
 return
 
 CloseRunningScripts() {
-    DetectHiddenWindows, On  ; Enable detection of hidden windows
+    DetectHiddenWindows, On
 
     WinGet, idList, List, ahk_class AutoHotkey
     Loop, %idList%
@@ -784,23 +663,6 @@ CloseRunningScripts() {
         }
     }
 }
-
-
-; CheckHourlyReport:
-;     ; Get the current time in HH:mm:ss format
-;     FormatTime, currentTime, , HH:mm:ss
-
-;     ; Check if the current time is exactly at the start of an hour and if MacroRunning is true
-;     if (MacroRunning && (currentTime ~= "00:59:59|01:59:59|02:59:59|03:59:59|04:59:59|05:59:59|06:59:59|07:59:59|08:59:59|09:59:59|10:59:59|11:59:59|12:59:59|13:59:59|14:59:59|15:59:59|16:59:59|17:59:59|18:59:59|19:59:59|20:59:59|21:59:59|22:59:59|23:59:59")) {
-;         ; Run the script
-;         Run, % A_ScriptDir . "\Tracker\format.ahk"
-;         Sleep, 1000
-;         Run, % A_ScriptDir . "\Tracker\HourlyReport.ahk"
-;         ; Sleep for a minute to prevent it from running multiple times within the same hour
-;         Sleep, 60000
-;     }
-; return
-
 
 
 
@@ -825,13 +687,6 @@ F3::
     return
 
 MacroCreatorEdit:
-    ; macroCreatorDir := A_ScriptDir "\MacroCreator"
-    ; FileSelectFile, SelectedFile, 3, %macroCreatorDir%, Select an AHK file, AHK Files (*.ahk)
-    
-    ; if SelectedFile
-    ; {
-    ;     MsgBox, You selected: %SelectedFile%
-    ; }
     MsgBox, Work in progress.
 return
 
